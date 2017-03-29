@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Find anagrams of default options for a list of commands
+# Commentary: http://bit.ly/2ogpOJA
 
 # Pull in a list of common Linux commands
 commandList=( $( 
