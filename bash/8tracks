@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# Script to export your favorited tracks from 8tracks.com
+# Supply your username as the first argument
+# Recommended Tools: jq, curl
+set -o pipefail
+
+err() {
+  echo -ne "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \\e[38;5;9m$* \\e[0m \\n" >&2
+}
+
+api_Pull() {
+  local URL
+  URL="https://8tracks.com/users/$1/favorite_tracks?per_page=300&format=jsonh"
+
+  local ERROR_MESSAGE
+  ERROR_MESSAGE="8tracks.com connection failed. Check connection and username"
+
+  if command -v curl >/dev/null 2>&1; then
+    curl -s "${URL}" | json_Parse || err "${ERROR_MESSAGE}"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q -O - "${URL}" | json_Parse || err "${ERROR_MESSAGE}"
+  else
+    printf "Please install curl or wget"
+  fi
+}
+
+json_Parse() {
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.favorite_tracks[] | .name + " - " + .performer'
+  else
+    grep -Po '"name":.*?[^\\]"' | awk -F':' '{print $2}'
+  fi
+}
+
+if [[ $# -eq 0 ]]; then
+  echo "  Usage: supply your 8tracks.com username (./8tracks username) 
+  Recommended Tools: jq, curl (sudo apt-get install jq curl)
+  Feedback: grayson@linux.com"
+  exit 1
+else
+  api_Pull "$@"
+fi
