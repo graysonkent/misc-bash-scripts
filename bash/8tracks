@@ -7,6 +7,7 @@ set -o pipefail
 
 err() {
   echo -ne "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: \\e[38;5;9m$* \\e[0m \\n" >&2
+  exit 1
 }
 
 api_Pull() {
@@ -21,7 +22,7 @@ api_Pull() {
   elif command -v wget >/dev/null 2>&1; then
     wget -q -O - "${URL}" | json_Parse || err "${ERROR_MESSAGE}"
   else
-    printf "Please install curl or wget"
+    err "Please install curl or wget"
   fi
 }
 
