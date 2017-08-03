@@ -6,7 +6,7 @@
 set -o pipefail
 
 err() {
-  printf "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*\\n"
+  printf "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: %s\\n" "$*"
   exit 1
 }
 
