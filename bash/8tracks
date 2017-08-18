@@ -36,7 +36,7 @@ json_Parse() {
 
 if [[ $# -eq 0 ]]; then
   echo "  Usage: supply your 8tracks.com username (./8tracks username) 
-  Recommended Tools: jq, curl (sudo apt-get install jq curl)
+  Recommended Tools: jq, curl
   Feedback: grayson@linux.com"
   exit 1
 else
